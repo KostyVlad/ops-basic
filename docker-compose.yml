@@ -1,5 +1,4 @@
-
-version: "3"
+version: "3.8"
 services:
   appserver:
     container_name: server2
@@ -7,7 +6,10 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy  
+    restart: on-failure              
+
   mysql:
     image: mysql:8.0
     environment:
@@ -20,3 +22,9 @@ services:
     volumes:
       - ./mysql-data:/var/lib/mysql
     privileged: true
+    healthcheck:                    
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pUnix11"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
