@@ -9,13 +9,6 @@ services:
       mysql:
         condition: service_healthy  
     restart: on-failure  
-    frontend:
-    image: vladkost/frontend:latest
-    ports:
-      - "4200:80"
-    depends_on:
-      - appserver 
-
   mysql:
     image: mysql:8.0
     environment:
@@ -34,3 +27,9 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+  frontend:
+    image: vladkost/frontend:latest
+    ports:
+      - "4200:80"
+    depends_on:
+      - appserver 
